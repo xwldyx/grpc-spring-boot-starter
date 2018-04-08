@@ -1,16 +1,20 @@
 package net.devh.springboot.autoconfigure.grpc.server;
 
+import io.grpc.Server;
+import io.grpc.services.HealthStatusManager;
+import io.netty.channel.Channel;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-
-import io.grpc.Server;
-import io.grpc.services.HealthStatusManager;
-import io.netty.channel.Channel;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 /**
  * User: Michael
@@ -18,8 +22,8 @@ import io.netty.channel.Channel;
  * Date: 5/17/16
  */
 @Configuration
-@EnableConfigurationProperties
 @ConditionalOnClass({Server.class, GrpcServerFactory.class})
+@ConditionalOnBean(annotation = EnableGrpcService.class)
 public class GrpcServerAutoConfiguration {
 
     @ConditionalOnMissingBean

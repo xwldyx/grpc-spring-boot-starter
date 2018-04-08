@@ -1,26 +1,23 @@
 package net.devh.springboot.autoconfigure.grpc.client;
 
-import java.net.InetSocketAddress;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import javax.annotation.concurrent.GuardedBy;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-
 import io.grpc.Attributes;
 import io.grpc.EquivalentAddressGroup;
 import io.grpc.NameResolver;
 import io.grpc.Status;
 import io.grpc.internal.SharedResourceHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+
+import javax.annotation.concurrent.GuardedBy;
+import java.net.InetSocketAddress;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * User: Michael
@@ -49,6 +46,59 @@ public class DiscoveryClientNameResolver extends NameResolver {
     private Listener listener;
     @GuardedBy("this")
     private List<ServiceInstance> serviceInstanceList;
+    private final Runnable resolutionRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Listener savedListener;
+            synchronized (DiscoveryClientNameResolver.this) {
+                // If this task is started by refresh(), there might already be a scheduled task.
+                if (resolutionTask != null) {
+                    resolutionTask.cancel(false);
+                    resolutionTask = null;
+                }
+                if (shutdown) {
+                    return;
+                }
+                savedListener = listener;
+                resolving = true;
+            }
+            try {
+                List<ServiceInstance> newServiceInstanceList;
+                try {
+                    newServiceInstanceList = client.getInstances(name);
+                } catch (Exception e) {
+                    savedListener.onError(Status.UNAVAILABLE.withCause(e));
+                    return;
+                }
+                if (newServiceInstanceList != null && !newServiceInstanceList.isEmpty()) {
+                    if (isNeedToUpdateServiceInstanceList(newServiceInstanceList)) {
+                        serviceInstanceList = newServiceInstanceList;
+                    } else {
+                        return;
+                    }
+                    List<EquivalentAddressGroup> equivalentAddressGroups = Lists.newArrayList();
+                    for (ServiceInstance serviceInstance : serviceInstanceList) {
+                        Map<String, String> metadata = serviceInstance.getMetadata();
+                        if (metadata.get("gRPC") != null) {
+                            Integer port = Integer.valueOf(metadata.get("gRPC"));
+                            log.info("Found gRPC server {} {}:{}", name, serviceInstance.getHost(), port);
+                            EquivalentAddressGroup addressGroup = new EquivalentAddressGroup(new InetSocketAddress(serviceInstance.getHost(), port), Attributes.EMPTY);
+                            equivalentAddressGroups.add(addressGroup);
+                        } else {
+                            log.error("Can not found gRPC server {}", name);
+                        }
+                    }
+                    savedListener.onAddresses(equivalentAddressGroups, Attributes.EMPTY);
+                } else {
+                    savedListener.onError(Status.UNAVAILABLE.withCause(new RuntimeException("UNAVAILABLE: NameResolver returned an empty list")));
+                }
+            } finally {
+                synchronized (DiscoveryClientNameResolver.this) {
+                    resolving = false;
+                }
+            }
+        }
+    };
 
     public DiscoveryClientNameResolver(String name, DiscoveryClient client, Attributes attributes, SharedResourceHolder.Resource<ScheduledExecutorService> timerServiceResource,
                                        SharedResourceHolder.Resource<ExecutorService> executorResource) {
@@ -81,61 +131,6 @@ public class DiscoveryClientNameResolver extends NameResolver {
             resolve();
         }
     }
-
-    private final Runnable resolutionRunnable = new Runnable() {
-        @Override
-        public void run() {
-            Listener savedListener;
-            synchronized (DiscoveryClientNameResolver.this) {
-                // If this task is started by refresh(), there might already be a scheduled task.
-                if (resolutionTask != null) {
-                    resolutionTask.cancel(false);
-                    resolutionTask = null;
-                }
-                if (shutdown) {
-                    return;
-                }
-                savedListener = listener;
-                resolving = true;
-            }
-            try {
-                List<ServiceInstance> newServiceInstanceList;
-                try {
-                    newServiceInstanceList = client.getInstances(name);
-                } catch (Exception e) {
-                    savedListener.onError(Status.UNAVAILABLE.withCause(e));
-                    return;
-                }
-
-                if (CollectionUtils.isNotEmpty(newServiceInstanceList)) {
-                    if (isNeedToUpdateServiceInstanceList(newServiceInstanceList)) {
-                        serviceInstanceList = newServiceInstanceList;
-                    } else {
-                        return;
-                    }
-                    List<EquivalentAddressGroup> equivalentAddressGroups = Lists.newArrayList();
-                    for (ServiceInstance serviceInstance : serviceInstanceList) {
-                        Map<String, String> metadata = serviceInstance.getMetadata();
-                        if (metadata.get("gRPC") != null) {
-                            Integer port = Integer.valueOf(metadata.get("gRPC"));
-                            log.info("Found gRPC server {} {}:{}", name, serviceInstance.getHost(), port);
-                            EquivalentAddressGroup addressGroup = new EquivalentAddressGroup(new InetSocketAddress(serviceInstance.getHost(), port), Attributes.EMPTY);
-                            equivalentAddressGroups.add(addressGroup);
-                        } else {
-                            log.error("Can not found gRPC server {}", name);
-                        }
-                    }
-                    savedListener.onAddresses(equivalentAddressGroups, Attributes.EMPTY);
-                } else {
-                    savedListener.onError(Status.UNAVAILABLE.withCause(new RuntimeException("UNAVAILABLE: NameResolver returned an empty list")));
-                }
-            } finally {
-                synchronized (DiscoveryClientNameResolver.this) {
-                    resolving = false;
-                }
-            }
-        }
-    };
 
     private boolean isNeedToUpdateServiceInstanceList(List<ServiceInstance> newServiceInstanceList) {
         if (serviceInstanceList.size() == newServiceInstanceList.size()) {

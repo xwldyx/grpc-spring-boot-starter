@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Date: 2016/11/8
  */
 @SpringBootApplication
+
 public class GrpcClientApplication {
 
     public static void main(String[] args) {
