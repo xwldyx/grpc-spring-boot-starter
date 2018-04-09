@@ -23,10 +23,10 @@
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-eureka</artifactId>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.springframework.cloud</groupId>-->
+      <!--<artifactId>spring-cloud-starter-eureka</artifactId>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
@@ -35,13 +35,28 @@
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-zipkin</artifactId>
     </dependency>
+    <!--<dependency>-->
+      <!--<groupId>net.devh</groupId>-->
+      <!--<artifactId>grpc-lib</artifactId>-->
+    <!--</dependency>-->
     <dependency>
-      <groupId>net.devh</groupId>
+      <groupId>com.wisfarm</groupId>
       <artifactId>grpc-lib</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>net.devh</groupId>
       <artifactId>grpc-client-spring-boot-starter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.cloud</groupId>
+          <artifactId>spring-cloud-starter-eureka</artifactId>
+        </exclusion>
+        <!--<exclusion>-->
+          <!--<groupId>org.springframework.cloud</groupId>-->
+          <!--<artifactId>spring-cloud-starter-consul-discovery</artifactId>-->
+        <!--</exclusion>-->
+      </exclusions>
     </dependency>
   </dependencies>
 

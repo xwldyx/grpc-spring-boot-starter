@@ -1,140 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
- <parent>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-starter-parent</artifactId>
-  <version>1.5.10.RELEASE</version>
-</parent>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.10.RELEASE</version>
+        <relativePath/>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>net.devh</groupId>
-  <artifactId>grpc-spring-boot-starter</artifactId>
-  <packaging>pom</packaging>
-  <version>1.4.1-SNAPSHOT</version>
+    <groupId>net.devh</groupId>
+    <artifactId>grpc-spring-boot-starter</artifactId>
+    <packaging>pom</packaging>
+    <version>1.4.1-SNAPSHOT</version>
 
-  <modules>
-    <module>grpc-client-spring-boot-autoconfigure</module>
-    <module>grpc-client-spring-boot-starter</module>
-    <module>grpc-server-spring-boot-autoconfigure</module>
-    <module>grpc-server-spring-boot-starter</module>
+    <modules>
+        <module>grpc-client-spring-boot-autoconfigure</module>
+        <module>grpc-client-spring-boot-starter</module>
+        <module>grpc-server-spring-boot-autoconfigure</module>
+        <module>grpc-server-spring-boot-starter</module>
 
-    <module>examples</module>
-  </modules>
-  <!--<scm>-->
+        <module>examples</module>
+    </modules>
+    <!--<scm>-->
     <!--<connection>scm:git:https://github.com/yidongnan/grpc-spring-boot-starter</connection>-->
     <!--<developerConnection>scm:git:git@github.com:yidongnan/grpc-spring-boot-starter.git</developerConnection>-->
     <!--<url>https://github.com/yidongnan/grpc-spring-boot-starter</url>-->
     <!--<tag>HEAD</tag>-->
-  <!--</scm>-->
+    <!--</scm>-->
 
-  <properties>
+    <properties>
 
-    <!--<repo.releases>https://oss.sonatype.org/service/local/staging/deploy/maven2</repo.releases>-->
-    <!--<repo.snapshots>https://oss.sonatype.org/content/repositories/snapshots</repo.snapshots>-->
+        <!--<repo.releases>https://oss.sonatype.org/service/local/staging/deploy/maven2</repo.releases>-->
+        <!--<repo.snapshots>https://oss.sonatype.org/content/repositories/snapshots</repo.snapshots>-->
 
-    <!--<scmBranch>n/a</scmBranch>-->
+        <!--<scmBranch>n/a</scmBranch>-->
 
-    <!-- Overrides to parent POM -->
-    <java.version>1.8</java.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Overrides to parent POM -->
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <!-- Maven Plugin Settings-->
-    <maven.javadoc.skip>true</maven.javadoc.skip>
-    <!--<maven.source.skip>true</maven.source.skip>-->
+        <!-- Maven Plugin Settings-->
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <!--<maven.source.skip>true</maven.source.skip>-->
 
-    <lombok.version>1.16.20</lombok.version>
-    <grpc.version>1.10.0</grpc.version>
-    <protobuf.version>3.5.1</protobuf.version>
-    <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
-    <spring-cloud.version>Edgware.SR3</spring-cloud.version>
-  </properties>
-
-  <distributionManagement>
-    <repository>
-      <id>nexus-releases</id>
-      <name>Packaging Release Repository</name>
-      <url>http://39.108.110.2:8081/repository/maven-releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>nexus-snapshot</id>
-      <name>Packaging Snapshot Repository</name>
-      <url>http://39.108.110.2:8081/repository/maven-snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>2.5.3</version>
-          <configuration>
-            <tagNameFormat>@{project.version}</tagNameFormat>
-            <mavenExecutorId>forked-path</mavenExecutorId>
-            <autoVersionSubmodules>true</autoVersionSubmodules>
-            <preparationGoals>validate</preparationGoals>
-            <pushChanges>true</pushChanges>
-            <useReleaseProfile>false</useReleaseProfile>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-    <plugins>
-      <!--<plugin>-->
-        <!--<groupId>org.codehaus.mojo</groupId>-->
-        <!--<artifactId>buildnumber-maven-plugin</artifactId>-->
-        <!--<version>1.4</version>-->
-        <!--<executions>-->
-          <!--<execution>-->
+        <lombok.version>1.16.20</lombok.version>
+        <grpc.version>1.10.0</grpc.version>
+        <protobuf.version>3.5.1</protobuf.version>
+        <spring-cloud.version>Edgware.SR3</spring-cloud.version>
+        <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
+        <spring-cloud.consul.version>1.3.3.RELEASE</spring-cloud.consul.version>
+        <spring-cloud.eureka.version>1.4.4.RELEASE</spring-cloud.eureka.version>
+        <spring-cloud.sleuth.version>1.3.3.RELEASE</spring-cloud.sleuth.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+                <version>${spring-cloud.consul.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-eureka</artifactId>
+                <version>${spring-cloud.eureka.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-sleuth</artifactId>
+                <version>${spring-cloud.sleuth.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-netty</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-stub</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-services</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Packaging Release Repository</name>
+            <url>http://39.108.110.2:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshot</id>
+            <name>Packaging Snapshot Repository</name>
+            <url>http://39.108.110.2:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <tagNameFormat>@{project.version}</tagNameFormat>
+                        <mavenExecutorId>forked-path</mavenExecutorId>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <preparationGoals>validate</preparationGoals>
+                        <pushChanges>true</pushChanges>
+                        <useReleaseProfile>false</useReleaseProfile>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!--<plugin>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>buildnumber-maven-plugin</artifactId>-->
+            <!--<version>1.4</version>-->
+            <!--<executions>-->
+            <!--<execution>-->
             <!--<phase>validate</phase>-->
             <!--<goals>-->
-              <!--<goal>create</goal>-->
+            <!--<goal>create</goal>-->
             <!--</goals>-->
-          <!--</execution>-->
-        <!--</executions>-->
-        <!--<configuration>-->
-          <!--<shortRevisionLength>7</shortRevisionLength>-->
-        <!--</configuration>-->
-      <!--</plugin>-->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.0.1</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.4</version>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--<configuration>-->
+            <!--<shortRevisionLength>7</shortRevisionLength>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

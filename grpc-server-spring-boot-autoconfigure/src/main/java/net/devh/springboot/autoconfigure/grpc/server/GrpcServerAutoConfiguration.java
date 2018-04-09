@@ -21,7 +21,9 @@ import org.springframework.core.annotation.Order;
  * Email: yidongnan@gmail.com
  * Date: 5/17/16
  */
+@Order(Ordered.HIGHEST_PRECEDENCE+99)
 @Configuration
+@EnableConfigurationProperties
 @ConditionalOnClass({Server.class, GrpcServerFactory.class})
 @ConditionalOnBean(annotation = EnableGrpcService.class)
 public class GrpcServerAutoConfiguration {

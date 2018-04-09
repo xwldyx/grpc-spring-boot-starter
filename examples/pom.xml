@@ -6,6 +6,7 @@
         <groupId>net.devh</groupId>
         <artifactId>grpc-spring-boot-starter</artifactId>
         <version>1.4.1-SNAPSHOT</version>
+        <relativePath>../</relativePath>
     </parent>
 
     <artifactId>examples</artifactId>
@@ -24,6 +25,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-actuator</artifactId>

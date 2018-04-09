@@ -8,12 +8,16 @@
 
 package net.devh.springboot.autoconfigure.grpc.server;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+
 import java.lang.annotation.*;
 
 
-@Target({ElementType.TYPE})
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public @interface EnableGrpcService {
     boolean value() default true;
 }
