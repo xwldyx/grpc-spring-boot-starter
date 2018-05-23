@@ -40,6 +40,8 @@ dependencies {
 }
 ````
 
+在启动类上加上``@EnableGrpcService``注解启动grpc服务功能
+
 实现 Grpc 生成的接口，并使用 ``@GrpcService`` 注解
 
 ````java
