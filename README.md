@@ -38,6 +38,8 @@ dependencies {
 }
 ````
 
+Annotate your Application with ``@EnableGrpcService`` 
+
 Annotate your server interface implementation(s) with ``@GrpcService``
 ````java
 @GrpcService(GreeterGrpc.class)
