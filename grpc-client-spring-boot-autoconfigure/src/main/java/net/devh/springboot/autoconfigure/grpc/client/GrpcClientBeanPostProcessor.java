@@ -6,7 +6,9 @@ import org.springframework.aop.framework.Advised;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
@@ -22,17 +24,25 @@ import lombok.SneakyThrows;
  * Date: 5/17/16
  * ModifyBy: lwx
  */
-public class GrpcClientBeanPostProcessor implements org.springframework.beans.factory.config.BeanPostProcessor {
+public class GrpcClientBeanPostProcessor implements BeanPostProcessor, BeanFactoryAware {
 
-	@Autowired
 	private DefaultListableBeanFactory beanFactory;
 
-	@Autowired
 	private GrpcChannelFactory channelFactory;
-
-	public GrpcClientBeanPostProcessor() {
+	
+	public GrpcClientBeanPostProcessor(GrpcChannelFactory channelFactory) {
+		this.channelFactory = channelFactory;
 	}
-
+	
+	@Override
+	public void setBeanFactory(BeanFactory beanFactory) {
+		if (!(beanFactory instanceof DefaultListableBeanFactory)) {
+			throw new IllegalArgumentException(
+					"GrpcClientBeanPostProcessor requires a DefaultListableBeanFactory: " + beanFactory);
+		}
+		this.beanFactory = (DefaultListableBeanFactory) beanFactory;
+	}
+	
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		Class<?> clazz = bean.getClass();

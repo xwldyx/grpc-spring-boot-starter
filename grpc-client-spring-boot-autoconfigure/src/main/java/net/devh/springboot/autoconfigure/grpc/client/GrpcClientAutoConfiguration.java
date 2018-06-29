@@ -50,8 +50,8 @@ public class GrpcClientAutoConfiguration {
 
     @Bean
     @ConditionalOnClass(GrpcClient.class)
-    public GrpcClientBeanPostProcessor grpcClientBeanPostProcessor() {
-        return new GrpcClientBeanPostProcessor();
+    public GrpcClientBeanPostProcessor grpcClientBeanPostProcessor(GrpcChannelFactory channelFactory) {
+        return new GrpcClientBeanPostProcessor(channelFactory);
     }
 
     @Configuration
