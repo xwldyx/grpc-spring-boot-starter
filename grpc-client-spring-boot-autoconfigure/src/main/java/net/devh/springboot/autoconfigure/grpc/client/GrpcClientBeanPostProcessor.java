@@ -8,6 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -27,12 +28,8 @@ import lombok.SneakyThrows;
 public class GrpcClientBeanPostProcessor implements BeanPostProcessor, BeanFactoryAware {
 
 	private DefaultListableBeanFactory beanFactory;
-
+	@Autowired
 	private GrpcChannelFactory channelFactory;
-	
-	public GrpcClientBeanPostProcessor(GrpcChannelFactory channelFactory) {
-		this.channelFactory = channelFactory;
-	}
 	
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) {

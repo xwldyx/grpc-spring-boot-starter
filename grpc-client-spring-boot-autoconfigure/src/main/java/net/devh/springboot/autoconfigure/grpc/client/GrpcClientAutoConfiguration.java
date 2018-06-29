@@ -11,6 +11,8 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import io.grpc.LoadBalancer;
 import io.grpc.util.RoundRobinLoadBalancerFactory;
@@ -20,6 +22,7 @@ import io.grpc.util.RoundRobinLoadBalancerFactory;
  * Email: yidongnan@gmail.com
  * Date: 5/17/16
  */
+@Order(Ordered.HIGHEST_PRECEDENCE+98)
 @Configuration
 @EnableConfigurationProperties
 @ConditionalOnClass({GrpcChannelFactory.class})
@@ -50,8 +53,8 @@ public class GrpcClientAutoConfiguration {
 
     @Bean
     @ConditionalOnClass(GrpcClient.class)
-    public GrpcClientBeanPostProcessor grpcClientBeanPostProcessor(GrpcChannelFactory channelFactory) {
-        return new GrpcClientBeanPostProcessor(channelFactory);
+    public GrpcClientBeanPostProcessor grpcClientBeanPostProcessor() {
+        return new GrpcClientBeanPostProcessor();
     }
 
     @Configuration
