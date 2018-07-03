@@ -4,7 +4,7 @@ apply plugin: 'maven-publish'
     repositories {
         maven {
             // change to point to your repo, e.g. http://my.org/repo
-            url "http://nexus.local:30004/repository/maven-snapshots/"
+            url "https://nexus.bitby.cn/repository/maven-snapshots/"
             credentials {
                 username = "${nexusUser}"
                 password = "${nexusPassword}"

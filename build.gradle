@@ -7,7 +7,7 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     ext {
-        projectVersion = '1.7.3'
+        projectVersion = '1.7.4'
 
         grpcVersion = '1.12.0'
         protobufVersion = '3.5.1'
@@ -70,7 +70,7 @@ allprojects {
         maven { url 'http://repo.spring.io/plugins-release' }
         maven { url "https://plugins.gradle.org/m2/" }
         maven {
-            url "http://nexus.local:30004/repository/maven-public/"
+            url "https://nexus.bitby.cn/repository/maven-public/"
         }
     }
     dependencies{
@@ -83,7 +83,7 @@ allprojects {
             jcenter()
             maven { url 'http://repo.spring.io/plugins-release' }
             maven { url "https://plugins.gradle.org/m2/" }
-            maven { url "http://nexus.local:30004/repository/maven-public/" }
+            maven { url "https://nexus.bitby.cn/repository/maven-public/" }
         }
     }
 }

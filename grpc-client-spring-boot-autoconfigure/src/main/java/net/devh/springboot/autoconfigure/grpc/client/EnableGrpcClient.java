@@ -7,8 +7,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import io.grpc.ClientInterceptor;
-
 
 /**
  * @author lwx
@@ -20,7 +18,4 @@ import io.grpc.ClientInterceptor;
 @Inherited
 public @interface EnableGrpcClient {
 
-    String value();
-
-    Class<? extends ClientInterceptor>[] interceptors() default {};
 }
